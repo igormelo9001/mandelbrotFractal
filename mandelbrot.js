@@ -14,12 +14,32 @@ var zoom = 1;
 var centerX = -0.743643135;
 var centerY = 0.131825963;
 
-// Ajuste da velocidade do zoom para o dobro
-var zoomSpeed = 0.04; // Originalmente: 0.02
+// Ajuste da velocidade do zoom para uma expansão mais rápida
+var zoomSpeed = 0.2; // Aumentado para 0.2
 
 // Zoom atual e próximo para a interpolação suave
 var currentZoom = zoom;
 var nextZoom = zoom;
+
+// Paleta de cores
+var colors = [
+    [66, 30, 15],
+    [25, 7, 26],
+    [9, 1, 47],
+    [4, 4, 73],
+    [0, 7, 100],
+    [12, 44, 138],
+    [24, 82, 177],
+    [57, 125, 209],
+    [134, 181, 229],
+    [211, 236, 248],
+    [241, 233, 191],
+    [248, 201, 95],
+    [255, 170, 0],
+    [204, 128, 0],
+    [153, 87, 0],
+    [106, 52, 3]
+];
 
 // Inicia o temporizador para o zoom automático
 setInterval(function() {
@@ -59,12 +79,23 @@ function drawFractal() {
                 n++;
             }
 
-            var brightness = map(n, 0, maxIter, 0, 1);
-            brightness = map(Math.sqrt(brightness), 0, 1, 0, 255);
+            var brightness;
+            if (n === maxIter) {
+                brightness = 0;
+            } else {
+                brightness = map(n, 0, maxIter, 0, colors.length - 1);
+            }
 
-            var pixel = (x + y * width) * 4;
+            var color1 = colors[Math.floor(brightness)];
+            var color2 = colors[Math.floor(brightness) + 1];
 
-            context.fillStyle = 'rgb(' + brightness + ', ' + brightness + ', ' + brightness + ')';
+            var interpolation = brightness - Math.floor(brightness);
+
+            var r = Math.round(lerp(color1[0], color2[0], interpolation));
+            var g = Math.round(lerp(color1[1], color2[1], interpolation));
+            var b = Math.round(lerp(color1[2], color2[2], interpolation));
+
+            context.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ')';
             context.fillRect(x, y, 1, 1);
         }
     }
