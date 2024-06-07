@@ -11,8 +11,19 @@ var height = canvas.height;
 var maxIter = 1000;
 
 var zoom = 1;
-var centerX = -0.743643135;
-var centerY = 0.131825963;
+
+// Função para gerar coordenadas aleatórias dentro do conjunto de Mandelbrot
+function getRandomCoordinates() {
+    return {
+        x: (Math.random() * 4 - 2),
+        y: (Math.random() * 4 - 2)
+    };
+}
+
+// Inicializa o centro com coordenadas aleatórias
+var initialCoords = getRandomCoordinates();
+var centerX = initialCoords.x;
+var centerY = initialCoords.y;
 
 // Ajuste da velocidade do zoom para uma expansão mais rápida
 var zoomSpeed = 0.2; // Aumentado para 0.2
